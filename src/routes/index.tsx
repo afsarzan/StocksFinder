@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { db } from '@/db';
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start';
@@ -24,6 +24,14 @@ export const Route = createFileRoute('/')({ component: App,
   }
  })
 
+ const AddNewButton = () => {
+  return  <Button size="sm" asChild>
+            <Link to="/todos/new">
+              <PlusIcon /> Add Todo
+            </Link>
+          </Button>
+ }
+
 function App() {
   const todos = Route.useLoaderData();
   const totalCount = todos.length;
@@ -44,11 +52,7 @@ function App() {
           }
         </div>
         <div>
-          <Button size="sm" asChild>
-            <Link to="/todos/new">
-              <PlusIcon /> Add Todo
-            </Link>
-          </Button>
+         <AddNewButton></AddNewButton>
         </div>
       </div>
       <TodoListTable todos={todos} />
@@ -57,17 +61,19 @@ function App() {
 
 function TodoListTable({ todos }: { todos: Array<Todo> }) {
   if(todos.length === 0) {
-    return <Empty>
+    return <Empty className='border border-dashed'>
       <EmptyHeader variant="icon">
         <EmptyMedia>
-          <ListTodoIcon size="l" />
+          <ListTodoIcon size="50" />
         </EmptyMedia>
         <EmptyTitle>No Todos Found</EmptyTitle>
         <EmptyDescription>
           You have no todos yet. Click the button below to add your first todo.
         </EmptyDescription>
       </EmptyHeader>
-
+      <EmptyContent>
+        <AddNewButton />
+      </EmptyContent>
     </Empty>
   }
 }
