@@ -46,9 +46,7 @@ function App() {
             <Badge variant="outline">
               {completedCount} of {totalCount} completed
             </Badge>
-            ) : (
-              <p className="text-lg">No todos found.</p>
-            ) 
+            ) : null
           }
         </div>
         <div>
