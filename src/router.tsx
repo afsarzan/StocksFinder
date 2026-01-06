@@ -8,7 +8,14 @@ export const getRouter = () => {
   const router = createRouter({
     routeTree,
     context: {},
-
+    defaultNotFoundComponent: () => {
+    return (
+        <div style={{ padding: '20px', textAlign: 'center' }}>
+          <h1>404 - Page Not Found</h1>
+          <p>The page you're looking for doesn't exist.</p>
+        </div>
+      )
+    },
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
   })
