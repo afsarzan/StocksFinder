@@ -5,7 +5,7 @@ import { PlusIcon } from "lucide-react";
 import { LoadingSwap } from "./ui/loading-swap";
 import { z } from "zod";
 import { todos } from "@/db/schema";
-import { createServerFn } from "@tanstack/react-start";
+import { createServerFn, useServerFn } from "@tanstack/react-start";
 import { db } from "@/db";
 import { redirect } from "@tanstack/react-router";
 
@@ -21,15 +21,16 @@ const addTodo = createServerFn( { method: 'POST'})
 export function TodoForm() {
     const nameRef  = useRef<HTMLInputElement>(null)
     const [isLoading, setLoading] = useState(false);
+    const addTodoFn = useServerFn(addTodo)
     
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
         const name = nameRef.current?.value;
         if(!name) return;
         setLoading(true);
-        await addTodo({data:{name}})
+        await addTodoFn({data:{name}})
         setLoading(false);
-        
+
     }
     return (
         <form onSubmit={handleSubmit}>            
