@@ -5,7 +5,7 @@ import { ClientOnly } from '@tanstack/react-router'
 
 export function LocalCountButton() {
   return (
-    <ClientOnly fallback="sdfsdfsdfsdf">
+    <ClientOnly fallback="loading..">
       <ClientSection />
     </ClientOnly>
   )

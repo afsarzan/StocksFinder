@@ -12,7 +12,7 @@ import { todos } from '@/db/schema'
 import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { eq } from 'drizzle-orm'
-import { ArrowLeftIcon } from 'lucide-react'
+import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react'
 
 const loaderFn = createServerFn({ method: 'GET' })
   .inputValidator((data: { id: string }) => data)
@@ -42,7 +42,7 @@ function RouteComponent() {
         className="text-muted-foreground"
       >
         <Link to="/">
-          <ArrowLeftIcon /> Todo List
+          <ArrowLeftIcon /> Tanstack- starter <ArrowRightIcon /> Todo List
         </Link>
       </Button>
       <Card>

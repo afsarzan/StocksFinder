@@ -5,7 +5,7 @@ import {
 import { db } from '@/db'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { EditIcon, ListTodoIcon, PlusIcon, Trash2Icon } from 'lucide-react'
+import { ArrowRightIcon, EditIcon, ListTodoIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 import {
   Empty,
   EmptyContent,
@@ -52,7 +52,7 @@ function App() {
     <div className="min-h-screen container space-y-8">
       <div className="flex justify-between items-center gap-4">
         <div className="space-y-2">
-          <h1 className="text-4xl font-bold">Todo List</h1>
+          <h1 className="text-2xl font-bold">Tanstack- start <ArrowRightIcon />Todo List</h1>
           {totalCount > 0 && (
             <Badge variant="outline">
               {completedCount} of {totalCount} completed
@@ -188,7 +188,7 @@ function TodoTableRow({
         {name}
       </TableCell>
       <TableCell className="text-sm text-muted-foreground">
-        {formatDate(createdAt)}
+        {/* {formatDate(createdAt)} */}
       </TableCell>
       <TableCell data-actions>
         <div className="flex items-center justify-end gap-1">
@@ -215,9 +215,10 @@ function TodoTableRow({
 }
 
 function formatDate(date: Date) {
-  const formatter = new Intl.DateTimeFormat(undefined, {
-    dateStyle: 'short',
-  })
+  return date;
+  // const formatter = new Intl.DateTimeFormat(undefined, {
+  //   dateStyle: 'short',
+  // })
 
-  return formatter.format(date)
+  // return formatter.format(date)
 }
