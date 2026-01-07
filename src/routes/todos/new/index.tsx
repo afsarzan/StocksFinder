@@ -17,8 +17,8 @@ function RouteComponent() {
           <ArrowLeftIcon />Back to Todos
         </Link>
       </Button>
-      <Card>
-        <CardHeader>
+      <Card className="p-4">
+        <CardHeader className='p-0'>
             <CardTitle>Add New Todo</CardTitle>
             <CardDescription> Create a new task to add to your todo list</CardDescription>
         </CardHeader>
