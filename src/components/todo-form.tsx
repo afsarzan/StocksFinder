@@ -1,50 +1,79 @@
-import { FormEvent, useRef, useState } from "react"
-import { Input } from "./ui/input"
-import { Button } from "./ui/button"
-import { PlusIcon } from "lucide-react";
-import { LoadingSwap } from "./ui/loading-swap";
-import { z } from "zod";
-import { todos } from "@/db/schema";
-import { createServerFn, useServerFn } from "@tanstack/react-start";
-import { db } from "@/db";
-import { redirect } from "@tanstack/react-router";
+import { FormEvent, useRef, useState } from 'react'
+import { Input } from './ui/input'
+import { Button } from './ui/button'
+import { LoadingSwap } from './ui/loading-swap'
+import { PlusIcon } from 'lucide-react'
+import { createServerFn, useServerFn } from '@tanstack/react-start'
+import z from 'zod'
+import { db } from '@/db'
+import { todos } from '@/db/schema'
+import { redirect } from '@tanstack/react-router'
+import { eq } from 'drizzle-orm'
 
-const addTodo = createServerFn( { method: 'POST'})
-    .inputValidator(z.object({name: z.string().min(1)}))
-    .handler( async ({data}) => {
-            await db.insert(todos).values({...data, isComplete: false})
-           throw redirect({ to: '/'})
-     })
+const addTodo = createServerFn({ method: 'POST' })
+  .inputValidator(z.object({ name: z.string().min(1) }))
+  .handler(async ({ data }) => {
+    await db.insert(todos).values({ ...data, isComplete: false })
 
+    throw redirect({ to: '/' })
+  })
 
+const updateTodo = createServerFn({ method: 'POST' })
+  .inputValidator(z.object({ id: z.string().min(1), name: z.string().min(1) }))
+  .handler(async ({ data }) => {
+    await db.update(todos).set(data).where(eq(todos.id, data.id))
 
-export function TodoForm() {
-    const nameRef  = useRef<HTMLInputElement>(null)
-    const [isLoading, setLoading] = useState(false);
-    const addTodoFn = useServerFn(addTodo)
-    
-    async function handleSubmit(e: FormEvent) {
-        e.preventDefault();
-        const name = nameRef.current?.value;
-        if(!name) return;
-        setLoading(true);
-        await addTodoFn({data:{name}})
-        setLoading(false);
+    throw redirect({ to: '/' })
+  })
 
+export function TodoForm({
+  todo,
+}: {
+  todo?: {
+    name: string
+    id: string
+  }
+}) {
+  const nameRef = useRef<HTMLInputElement>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const addTodoFn = useServerFn(addTodo)
+  const updateTodoFn = useServerFn(updateTodo)
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault()
+    const name = nameRef.current?.value
+    if (!name) return
+
+    setIsLoading(true)
+    if (todo == null) {
+      await addTodoFn({ data: { name } })
+    } else {
+      await updateTodoFn({ data: { name, id: todo.id } })
     }
-    return (
-        <form onSubmit={handleSubmit}>            
-            <div className="flex ">
-                <Input autoFocus ref={nameRef}
-                    placeholder="Enter you todo ..."
-                    className="flex-1"
-                    arai-label="Name"/>
-                <Button type="submit" className="ml-2" disabled={isLoading}>
-                    <LoadingSwap isLoading={isLoading} className="flex gap-2 items-center">
-                        <PlusIcon /> Add
-                    </LoadingSwap>
-                </Button>
-            </div>
-        </form>
-    )
+    setIsLoading(false)
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="flex gap-2">
+      <Input
+        autoFocus
+        ref={nameRef}
+        placeholder="Enter your todo..."
+        className="flex-1"
+        aria-label="Name"
+        defaultValue={todo?.name}
+      />
+      <Button type="submit" disabled={isLoading}>
+        <LoadingSwap isLoading={isLoading} className="flex gap-2 items-center">
+          {todo == null ? (
+            <>
+              <PlusIcon /> Add
+            </>
+          ) : (
+            'Update'
+          )}
+        </LoadingSwap>
+      </Button>
+    </form>
+  )
 }
