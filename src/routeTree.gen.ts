@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StockFormsRouteImport } from './routes/stockForms'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TodosNewIndexRouteImport } from './routes/todos/new/index'
 import { Route as TodosIdEditIndexRouteImport } from './routes/todos/$id/edit/index'
 
+const StockFormsRoute = StockFormsRouteImport.update({
+  id: '/stockForms',
+  path: '/stockForms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,36 +37,47 @@ const TodosIdEditIndexRoute = TodosIdEditIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/stockForms': typeof StockFormsRoute
   '/todos/new': typeof TodosNewIndexRoute
   '/todos/$id/edit': typeof TodosIdEditIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/stockForms': typeof StockFormsRoute
   '/todos/new': typeof TodosNewIndexRoute
   '/todos/$id/edit': typeof TodosIdEditIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/stockForms': typeof StockFormsRoute
   '/todos/new/': typeof TodosNewIndexRoute
   '/todos/$id/edit/': typeof TodosIdEditIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/todos/new' | '/todos/$id/edit'
+  fullPaths: '/' | '/stockForms' | '/todos/new' | '/todos/$id/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/todos/new' | '/todos/$id/edit'
-  id: '__root__' | '/' | '/todos/new/' | '/todos/$id/edit/'
+  to: '/' | '/stockForms' | '/todos/new' | '/todos/$id/edit'
+  id: '__root__' | '/' | '/stockForms' | '/todos/new/' | '/todos/$id/edit/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  StockFormsRoute: typeof StockFormsRoute
   TodosNewIndexRoute: typeof TodosNewIndexRoute
   TodosIdEditIndexRoute: typeof TodosIdEditIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/stockForms': {
+      id: '/stockForms'
+      path: '/stockForms'
+      fullPath: '/stockForms'
+      preLoaderRoute: typeof StockFormsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  StockFormsRoute: StockFormsRoute,
   TodosNewIndexRoute: TodosNewIndexRoute,
   TodosIdEditIndexRoute: TodosIdEditIndexRoute,
 }

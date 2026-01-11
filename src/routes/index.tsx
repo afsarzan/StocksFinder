@@ -30,6 +30,7 @@ import { todos } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { startTransition, useState } from 'react'
 import { LocalCountButton } from '@/components/local-count-button'
+import { Navigation } from '@/components/navigation'
 
 const serverLoader = createServerFn({ method: 'GET' }).handler(() => {
   return db.query.todos.findMany()
@@ -50,9 +51,16 @@ function App() {
 
   return (
     <div className="min-h-screen container space-y-8">
-      <div className="flex justify-between items-center gap-4">
+
+      <div>
+        <div className="menu flex gap-4 mb-4">
+          <Navigation />
+        </div>
+      </div>
+      <div>
+        <div className="flex justify-between items-center gap-4">
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold">Tanstack- start <ArrowRightIcon />Todo List</h1>
+          {/* <h1 className="text-2xl font-bold">Tanstack- start <ArrowRightIcon />Todo List</h1> */}
           {totalCount > 0 && (
             <Badge variant="outline">
               {completedCount} of {totalCount} completed
@@ -70,6 +78,7 @@ function App() {
       </div>
 
       <TodoListTable todos={todos} />
+      </div>
     </div>
   )
 }
